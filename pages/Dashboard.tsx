@@ -5,9 +5,11 @@ import Notes from "../components/Notes";
 
 export default function Dashboard() {
   return (
-    <main className="h-screen flex flex-col">
+    <main className="">
       <Navbar />
-      <DetailBoxes />
+      <div>
+        <DetailBoxes />
+      </div>
 
       <section>
         <Tasks />
