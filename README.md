@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+# 🧠 Personal Productivity Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small but realistic **React + TypeScript** application built to solidify intermediate concepts such as typed state, reusable components, custom hooks, and clean data flow.
 
-Currently, two official plugins are available:
+This project focuses more on **architecture, type safety, and scalability** than visual complexity.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+### 📝 Task Manager
 
-## Expanding the ESLint configuration
+- Create, complete, and delete tasks
+- Task priority (`low`, `medium`, `high`)
+- Filter tasks by status
+- Fully typed task state and callbacks
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🗒 Notes
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Create and edit simple text notes
+- Notes persist using `localStorage`
+- Shared reusable input components
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🎨 Theme Toggle
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Light / Dark theme support
+- Theme state shared across the app
+- Theme preference persisted locally
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### ♻ Reusable UI Components
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Button (with variants)
+- Input
+- Card / Container components
+- Typed props and controlled APIs
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 🪝 Custom Hooks
+
+- `useToggle`
+- `useLocalStorage<T>`
+- Hooks reused across multiple features
+
+---
+
+## 🛠 Tech Stack
+
+- **React**
+- **TypeScript**
+- **Vite**
+- **Tailwind CSS**
+- Browser `localStorage` (for persistence)
+
+---
+
+## 🎯 Project Goals
+
+- Practice real-world **React + TypeScript patterns**
+- Design reusable, well-typed components
+- Understand type boundaries and data flow
+- Avoid over-engineering while keeping the app scalable
+
+This project intentionally avoids state libraries and advanced frameworks to keep the focus on **core React + TypeScript mastery**.
+
+---
+
+## 🚀 Getting Started
+
+```bash
+npm install
+npm run dev
 ```
