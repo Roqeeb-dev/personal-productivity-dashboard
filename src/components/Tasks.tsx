@@ -9,7 +9,9 @@ interface Task {
 }
 
 export default function Tasks() {
-  const [tasks, setTasks] = useState<Task[] | []>([]);
+  const [tasks, setTasks] = useState<Array<Task> | []>([]);
+
+  const [taskText, setTaskText] = useState<string>("");
 
   function showAllTasks(tasks: Array<Task>) {
     return tasks;
@@ -21,6 +23,18 @@ export default function Tasks() {
 
   function showCompletedTasks(tasks: Array<Task>) {
     return tasks.filter((t) => t.status === "completed");
+  }
+
+  function addNewTask() {
+    setTasks((prev) => [
+      ...prev,
+      {
+        id: prev[prev.length - 1].id ? prev[prev.length - 1].id + 1 : 0,
+        task: taskText,
+        priority: "high",
+        status: "pending",
+      },
+    ]);
   }
 
   return (
@@ -48,7 +62,7 @@ export default function Tasks() {
         </button>
         <button
           onClick={() => {
-            showActiveTasks(tasks);
+            showCompletedTasks(tasks);
           }}
           className="hover:text-white hover:bg-[#0B0E10] flex-1 p-3 font-bold"
         >
@@ -57,11 +71,16 @@ export default function Tasks() {
       </div>
 
       {/* Tasks addition input */}
-      <form className="w-full flex items-center space-x-1">
+      <form
+        onSubmit={addNewTask}
+        className="w-full flex items-center space-x-1"
+      >
         <input
           type="task"
           name="task"
           className="flex-1 bg-gray-700 p-2 text-sm focus:outline-none rounded-md"
+          value={taskText}
+          onChange={(e) => setTaskText(e.target.value)}
           placeholder="Add a new task"
         />
         <select name="priority">
