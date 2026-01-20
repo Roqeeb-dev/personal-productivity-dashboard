@@ -71,7 +71,7 @@ export default function Tasks() {
       <form onSubmit={addNewTask} className="mt-5 flex items-center gap-2">
         <input
           type="text"
-          className="flex-1 rounded-xl bg-[#15191D] px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-green-500/40"
+          className="flex-1 rounded-xl bg-[#15191D] px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-green-500/40 focus:bg-black"
           placeholder="Add a new task"
           value={taskText}
           onChange={(e) => setTaskText(e.target.value)}
