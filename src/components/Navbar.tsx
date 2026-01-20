@@ -4,7 +4,7 @@ import { Sun, Moon } from "lucide-react";
 type Theme = "dark" | "light";
 
 export default function Navbar() {
-  const [tasks, setTasks] = useState<number>(7);
+  const [tasks] = useState<number>(7);
   const [theme, setTheme] = useState<Theme>("light");
   const currentDate: string = new Date().toDateString();
 
