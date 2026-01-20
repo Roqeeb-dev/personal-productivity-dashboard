@@ -11,7 +11,7 @@ export default function Dashboard() {
         <DetailBoxes />
       </div>
 
-      <section>
+      <section className="grid grid-cols-1 md:grid-cols-2 space-x-3">
         <Tasks />
         <Notes />
       </section>
