@@ -17,15 +17,15 @@ export default function Navbar() {
       {/* Logo and subtitle */}
 
       <div>
-        <h1 className="text-3xl font-bold mb-1">Productivity Hub</h1>
+        <h1 className="text-2xl font-medium mb-1">Productivity Hub</h1>
         <p className="text-gray-300 text-sm">Stay focused and organized</p>
       </div>
 
       {/* Text and theme toggle */}
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-3 text-sm">
         <section className="text-[#7A828E]">
           <p>{currentDate}</p>
-          <p className={tasks > 0 ? "text-green-500" : "text-red-500"}>
+          <p className={`${tasks > 0 ? "text-green-500" : "text-red-500"}`}>
             {tasks} {tasks > 0 ? "tasks" : "task"} remaining
           </p>
         </section>
