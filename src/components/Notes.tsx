@@ -15,12 +15,14 @@ export default function Notes() {
     if (!noteText.trim()) return;
 
     setNotes((prev) => [
-      ...prev,
       {
         text: noteText,
         timeStamp: new Date(),
       },
+      ...prev,
     ]);
+
+    setNoteText("");
   }
 
   return (
@@ -37,7 +39,7 @@ export default function Notes() {
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             setNoteText(e.target.value);
           }}
-          className="h-[200px] w-full bg-[#15191D] focus:bg-black focus:ring-1 focus:ring-green-500/40 focus:outline-none rounded-3xl my-4 p-2 text-md"
+          className="h-[150px] w-full bg-[#15191D] focus:bg-black focus:ring-1 focus:ring-green-500/40 focus:outline-none rounded-3xl my-4 p-2 text-md"
         ></textarea>
         <div className="flex items-center justify-end">
           <button className="flex items-center gap-1 rounded-xl bg-green-500 px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-600">

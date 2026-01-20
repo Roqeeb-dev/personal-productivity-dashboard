@@ -5,7 +5,7 @@ import Notes from "../components/Notes";
 
 export default function Dashboard() {
   return (
-    <main className="bg-[#0B0E10] h-screen px-10">
+    <main className="bg-[#0B0E10] min-h-screen px-10">
       <Navbar />
       <div>
         <DetailBoxes />
