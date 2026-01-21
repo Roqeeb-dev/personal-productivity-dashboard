@@ -1,16 +1,8 @@
 import { useState } from "react";
-import { Sun, Moon } from "lucide-react";
-
-type Theme = "dark" | "light";
 
 export default function Navbar() {
   const [tasks] = useState<number>(7);
-  const [theme, setTheme] = useState<Theme>("light");
   const currentDate: string = new Date().toDateString();
-
-  function toggleTheme() {
-    setTheme((prev: Theme) => (prev === "light" ? "dark" : "light"));
-  }
 
   return (
     <header className="bg-[#111417] text-white p-5 px-5 mb-10 flex items-center justify-between">
@@ -29,14 +21,6 @@ export default function Navbar() {
             {tasks} {tasks > 0 ? "tasks" : "task"} remaining
           </p>
         </section>
-
-        <button className="bg-[#0F1F18] p-2 rounded-md" onClick={toggleTheme}>
-          {theme === "light" ? (
-            <Moon className="w-5 h-5" />
-          ) : (
-            <Sun className="w-5 h-5" />
-          )}
-        </button>
       </div>
     </header>
   );
