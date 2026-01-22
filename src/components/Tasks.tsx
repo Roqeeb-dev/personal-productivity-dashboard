@@ -19,12 +19,16 @@ export default function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([defaultTask]);
   const [taskText, setTaskText] = useState("");
 
-  function showActiveTasks(tasks: Task[]) {
-    return tasks.filter((t) => t.status === "active");
+  function showActiveTasks() {
+    setTasks((prev) => prev.filter((t) => t.status === "active"));
   }
 
-  function showCompletedTasks(tasks: Task[]) {
-    return tasks.filter((t) => t.status === "completed");
+  function showCompletedTasks() {
+    setTasks((prev) => prev.filter((t) => t.status === "completed"));
+  }
+
+  function showAllTasks() {
+    return tasks;
   }
 
   function addNewTask(e: React.FormEvent) {
@@ -44,25 +48,38 @@ export default function Tasks() {
     setTaskText("");
   }
 
+  function markAsCompleted(id: number) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, status: "completed" } : task,
+      ),
+    );
+  }
+
   return (
     <main className="rounded-3xl bg-gradient-to-br from-[#14181C] to-[#0E1114] px-8 py-6 text-white shadow-xl">
       {/* Header */}
       <h1 className="text-2xl font-semibold tracking-tight">Task Manager</h1>
 
       <p className="mt-2 flex items-center gap-2 text-sm text-gray-400">
-        <span>{showActiveTasks(tasks).length} active</span>
+        <span>0 active</span>
         <span className="h-1 w-1 rounded-full bg-gray-500" />
-        <span>{showCompletedTasks(tasks).length} completed</span>
+        <span>0 completed</span>
       </p>
 
       {/* Tabs */}
       <div className="mt-6 flex overflow-hidden rounded-xl border border-white/5 bg-[#0B0E10] text-sm font-medium text-[#A1A8B3]">
-        {["All", "Active", "Completed"].map((tab) => (
+        {[
+          { text: "All", action: showAllTasks },
+          { text: "Active", action: showActiveTasks },
+          { text: "Completed", action: showCompletedTasks },
+        ].map((tab) => (
           <button
-            key={tab}
+            key={tab.text}
+            onClick={tab.action}
             className="flex-1 py-3 transition hover:bg-black/40 hover:text-white"
           >
-            {tab}
+            {tab.text}
           </button>
         ))}
       </div>
@@ -91,21 +108,8 @@ export default function Tasks() {
         {tasks.map((task) => (
           <div
             key={task.id}
-            className="flex items-center gap-4 rounded-xl border border-green-500/10 bg-black/40 px-4 py-3 transition hover:border-green-500/30"
+            className="flex items-center justify-between gap-4 rounded-xl border border-green-500/10 bg-black/40 p-4 transition hover:border-green-500/30"
           >
-            {/* Checkbox */}
-            <input
-              type="checkbox"
-              className="
-                h-5 w-5 cursor-pointer appearance-none rounded-md
-                border border-green-500/40 bg-black
-                checked:border-green-500 checked:bg-green-500
-                checked:bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%223%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%2220 6 9 17 4 12%22/%3E%3C/svg%3E')]
-                checked:bg-center checked:bg-no-repeat checked:bg-[length:14px_14px]
-                transition
-              "
-            />
-
             {/* Priority */}
             <span
               className={`rounded-full px-2 py-0.5 text-xs font-medium uppercase tracking-wide
@@ -121,13 +125,27 @@ export default function Tasks() {
             </span>
 
             {/* Task text */}
-            <p
-              className={`flex-1 text-sm text-gray-300 ${
-                task.status === "completed" ? "line-through text-gray-500" : ""
-              }`}
-            >
-              {task.task}
-            </p>
+            <div>
+              <p
+                className={`flex-1 text-xl font-medium ${
+                  task.status === "completed"
+                    ? "line-through text-gray-500"
+                    : ""
+                }`}
+              >
+                {task.task}
+              </p>
+              <p className="text-green-500 text-xs uppercase">{task.status}</p>
+            </div>
+
+            {!(task.status === "completed") && (
+              <button
+                onClick={() => markAsCompleted(task.id)}
+                className="text-xs text-green-600 p-1 border rounded-3xl hover:bg-gray-700"
+              >
+                Mark as completed
+              </button>
+            )}
           </div>
         ))}
       </section>

@@ -1,28 +1,35 @@
 import { CheckCircle, Clock, FileText, TrendingUp } from "lucide-react";
+import { useState } from "react";
 
 export default function DetailBoxes() {
+  const [userDetails, setUserDetails] = useState({
+    completed: 0,
+    pending: 0,
+    notes: 0,
+    focusScore: "0%",
+  });
   const details = [
     {
       icon: CheckCircle,
-      count: 12,
+      count: userDetails.completed,
       text: "COMPLETED",
       delta: "+3",
     },
     {
       icon: Clock,
-      count: 5,
+      count: userDetails.pending,
       text: "PENDING",
       delta: "Today",
     },
     {
       icon: FileText,
-      count: 8,
+      count: userDetails.notes,
       text: "NOTES",
       delta: "+2",
     },
     {
       icon: TrendingUp,
-      count: "85%",
+      count: userDetails.focusScore,
       text: "FOCUS SCORE",
       delta: "+5%",
     },
