@@ -1,8 +1,11 @@
-import { useState } from "react";
+interface NavProps {
+  completed: number;
+  active: number;
+}
 
-export default function Navbar() {
-  const [tasks] = useState<number>(7);
+export default function Navbar({ completed, active }: NavProps) {
   const currentDate: string = new Date().toDateString();
+  const totalTasks = completed + active;
 
   return (
     <header className="bg-[#111417] text-white p-5 px-5 mb-10 flex items-center justify-between">
@@ -17,8 +20,10 @@ export default function Navbar() {
       <div className="flex items-center space-x-3 text-sm">
         <section className="text-[#7A828E]">
           <p>{currentDate}</p>
-          <p className={`${tasks > 0 ? "text-green-500" : "text-red-500"}`}>
-            {tasks} {tasks > 0 ? "tasks" : "task"} remaining
+          <p
+            className={`${totalTasks > 0 ? "text-green-500" : "text-red-500"}`}
+          >
+            {totalTasks} {totalTasks > 0 ? "tasks" : "task"} remaining
           </p>
         </section>
       </div>

@@ -12,7 +12,7 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen bg-[#0B0E10] px-6 md:px-10">
-      <Navbar />
+      <Navbar completed={completed} active={active} />
 
       <DetailBoxes completed={completed} active={active} notes={notes} />
 
