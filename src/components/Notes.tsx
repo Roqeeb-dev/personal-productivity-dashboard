@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 
 interface Note {
@@ -7,7 +7,11 @@ interface Note {
   timeStamp: number;
 }
 
-export default function Notes() {
+interface NotesProps {
+  onNotesChange: (count: number) => void;
+}
+
+export default function Notes({ onNotesChange }: NotesProps) {
   const [notes, setNotes] = useState<Note[]>([]);
   const [noteText, setNoteText] = useState("");
 
@@ -38,6 +42,10 @@ export default function Notes() {
     if (hours < 24) return `${hours} hr ago`;
     return `${days} day${days > 1 ? "s" : ""} ago`;
   }
+
+  useEffect(() => {
+    onNotesChange(notes.length);
+  }, [notes, onNotesChange]);
 
   return (
     <main className="rounded-3xl bg-gradient-to-br from-[#14181C] to-[#0E1114] px-8 py-6 text-white shadow-xl">

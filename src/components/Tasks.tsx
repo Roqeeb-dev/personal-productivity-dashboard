@@ -1,11 +1,15 @@
 import { Plus, Check } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Task {
   id: number;
   task: string;
   priority: "high" | "med" | "low";
   status: "active" | "completed";
+}
+
+interface TasksProps {
+  onStatsChange: (stats: { completed: number; active: number }) => void;
 }
 
 type Filter = "all" | "active" | "completed";
@@ -17,7 +21,7 @@ const defaultTask: Task = {
   status: "active",
 };
 
-export default function Tasks() {
+export default function Tasks({ onStatsChange }: TasksProps) {
   const [tasks, setTasks] = useState<Task[]>([defaultTask]);
   const [taskText, setTaskText] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
@@ -52,6 +56,13 @@ export default function Tasks() {
       ),
     );
   }
+
+  useEffect(() => {
+    const completed = tasks.filter((t) => t.status === "completed").length;
+    const active = tasks.filter((t) => t.status === "active").length;
+
+    onStatsChange({ completed, active });
+  }, [tasks, onStatsChange]);
 
   return (
     <main className="rounded-3xl bg-gradient-to-br from-[#14181C] to-[#0E1114] px-8 py-6 text-white shadow-xl">

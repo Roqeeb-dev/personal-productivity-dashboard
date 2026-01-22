@@ -1,19 +1,30 @@
+import { useState } from "react";
+
 import Navbar from "../components/Navbar";
 import DetailBoxes from "../components/DetailBoxes";
 import Tasks from "../components/Tasks";
 import Notes from "../components/Notes";
 
 export default function Dashboard() {
-  return (
-    <main className="bg-[#0B0E10] min-h-screen px-10">
-      <Navbar />
-      <div>
-        <DetailBoxes />
-      </div>
+  const [completed, setCompleted] = useState(0);
+  const [active, setActive] = useState(0);
+  const [notes, setNotes] = useState(0);
 
-      <section className="grid grid-cols-1 md:grid-cols-2 space-x-3">
-        <Tasks />
-        <Notes />
+  return (
+    <main className="min-h-screen bg-[#0B0E10] px-6 md:px-10">
+      <Navbar />
+
+      <DetailBoxes completed={completed} active={active} notes={notes} />
+
+      <section className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Tasks
+          onStatsChange={(stats) => {
+            setCompleted(stats.completed);
+            setActive(stats.active);
+          }}
+        />
+
+        <Notes onNotesChange={(count) => setNotes(count)} />
       </section>
     </main>
   );
