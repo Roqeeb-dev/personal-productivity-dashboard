@@ -23,7 +23,7 @@ export default function Navbar({ completed, active }: NavProps) {
           <p
             className={`${totalTasks > 0 ? "text-green-500" : "text-red-500"}`}
           >
-            {totalTasks} {totalTasks > 0 ? "tasks" : "task"} remaining
+            {totalTasks} {totalTasks === 1 ? "task" : "tasks"} remaining
           </p>
         </section>
       </div>
