@@ -1,73 +1,79 @@
 import { CheckCircle, Clock, FileText, TrendingUp } from "lucide-react";
-import { useState } from "react";
 
-export default function DetailBoxes() {
-  const [userDetails, setUserDetails] = useState({
-    completed: 0,
-    pending: 0,
-    notes: 0,
-    focusScore: "0%",
-  });
+interface DetailBoxesProps {
+  completed: number;
+  active: number;
+  notes: number;
+}
+
+export default function DetailBoxes({
+  completed,
+  active,
+  notes,
+}: DetailBoxesProps) {
+  const totalTasks = completed + active;
+
+  const focusScore =
+    totalTasks === 0 ? "0%" : `${Math.round((completed / totalTasks) * 100)}%`;
+
   const details = [
     {
       icon: CheckCircle,
-      count: userDetails.completed,
-      text: "COMPLETED",
-      delta: "+3",
+      value: completed,
+      label: "COMPLETED",
+      delta: completed > 0 ? `+${completed}` : "—",
     },
     {
       icon: Clock,
-      count: userDetails.pending,
-      text: "PENDING",
-      delta: "Today",
+      value: active,
+      label: "ACTIVE",
+      delta: active > 0 ? "Today" : "—",
     },
     {
       icon: FileText,
-      count: userDetails.notes,
-      text: "NOTES",
-      delta: "+2",
+      value: notes,
+      label: "NOTES",
+      delta: notes > 0 ? `+${notes}` : "—",
     },
     {
       icon: TrendingUp,
-      count: userDetails.focusScore,
-      text: "FOCUS SCORE",
-      delta: "+5%",
+      value: focusScore,
+      label: "FOCUS SCORE",
+      delta: totalTasks > 0 ? "Improving" : "—",
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 px-4 my-6">
+    <div className="my-6 grid grid-cols-2 gap-4 px-4 lg:grid-cols-4">
       {details.map((detail, i) => {
         const Icon = detail.icon;
 
         return (
           <div
             key={i}
-            className="relative h-[170px] rounded-3xl border border-[#1F242A]
+            className="relative h-[160px] rounded-3xl border border-[#1F242A]
             bg-gradient-to-br from-[#14181C] to-[#0E1114]
-            p-6 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.02)]"
+            p-5 text-white transition
+            hover:border-[#16C784]/30"
           >
-            {/* Top-right delta */}
-            <span className="absolute top-5 right-6 text-xs text-[#16C784]">
+            {/* Delta */}
+            <span className="absolute right-5 top-5 text-xs text-[#16C784]/80">
               {detail.delta}
             </span>
 
-            {/* Icon badge */}
-            <div
-              className="mb-6 w-fit rounded-xl p-2.5
-              bg-[#0F1F1A] border border-[#163D2D]"
-            >
-              <Icon className="w-6 h-6 text-[#16C784]" />
+            {/* Icon */}
+            <div className="mb-5 w-fit rounded-xl border border-[#163D2D] bg-[#0F1F1A] p-2.5">
+              <Icon className="h-5 w-5 text-[#16C784]" />
             </div>
 
             {/* Value */}
-            <p className="text-3xl font-semibold tracking-tight">
-              {detail.count}
+            <p className="text-2xl font-semibold tracking-tight">
+              {detail.value}
             </p>
 
             {/* Label */}
             <p className="mt-1 text-xs tracking-widest text-gray-400">
-              {detail.text}
+              {detail.label}
             </p>
           </div>
         );

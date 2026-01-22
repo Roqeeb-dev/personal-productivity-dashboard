@@ -1,56 +1,53 @@
-import { Plus } from "lucide-react";
+import { Plus, Check } from "lucide-react";
 import { useState } from "react";
 
 interface Task {
   id: number;
   task: string;
   priority: "high" | "med" | "low";
-  status: "active" | "completed" | "pending";
+  status: "active" | "completed";
 }
 
+type Filter = "all" | "active" | "completed";
+
 const defaultTask: Task = {
-  id: 0,
-  task: "Hello and Welcome",
+  id: Date.now(),
+  task: "Hello and welcome 👋",
   priority: "med",
-  status: "pending",
+  status: "active",
 };
 
 export default function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([defaultTask]);
   const [taskText, setTaskText] = useState("");
+  const [filter, setFilter] = useState<Filter>("all");
 
-  function showActiveTasks() {
-    setTasks((prev) => prev.filter((t) => t.status === "active"));
-  }
+  const activeTasks = tasks.filter((t) => t.status === "active").length;
+  const completedTasks = tasks.filter((t) => t.status === "completed").length;
 
-  function showCompletedTasks() {
-    setTasks((prev) => prev.filter((t) => t.status === "completed"));
-  }
-
-  function showAllTasks() {
-    return tasks;
-  }
+  const filteredTasks =
+    filter === "all" ? tasks : tasks.filter((t) => t.status === filter);
 
   function addNewTask(e: React.FormEvent) {
     e.preventDefault();
     if (!taskText.trim()) return;
 
     setTasks((prev) => [
-      ...prev,
       {
-        id: prev.length ? prev[prev.length - 1].id + 1 : 0,
-        task: taskText,
+        id: Date.now(),
+        task: taskText.trim(),
         priority: "high",
-        status: "pending",
+        status: "active",
       },
+      ...prev,
     ]);
 
     setTaskText("");
   }
 
   function markAsCompleted(id: number) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
+    setTasks((prev) =>
+      prev.map((task) =>
         task.id === id ? { ...task, status: "completed" } : task,
       ),
     );
@@ -62,24 +59,25 @@ export default function Tasks() {
       <h1 className="text-2xl font-semibold tracking-tight">Task Manager</h1>
 
       <p className="mt-2 flex items-center gap-2 text-sm text-gray-400">
-        <span>0 active</span>
+        <span>{activeTasks} active</span>
         <span className="h-1 w-1 rounded-full bg-gray-500" />
-        <span>0 completed</span>
+        <span>{completedTasks} completed</span>
       </p>
 
       {/* Tabs */}
-      <div className="mt-6 flex overflow-hidden rounded-xl border border-white/5 bg-[#0B0E10] text-sm font-medium text-[#A1A8B3]">
-        {[
-          { text: "All", action: showAllTasks },
-          { text: "Active", action: showActiveTasks },
-          { text: "Completed", action: showCompletedTasks },
-        ].map((tab) => (
+      <div className="mt-6 flex overflow-hidden rounded-xl border border-white/5 bg-[#0B0E10] text-sm font-medium">
+        {(["all", "active", "completed"] as Filter[]).map((tab) => (
           <button
-            key={tab.text}
-            onClick={tab.action}
-            className="flex-1 py-3 transition hover:bg-black/40 hover:text-white"
+            key={tab}
+            onClick={() => setFilter(tab)}
+            className={`flex-1 py-3 transition
+              ${
+                filter === tab
+                  ? "bg-black/60 text-white"
+                  : "text-[#A1A8B3] hover:bg-black/40 hover:text-white"
+              }`}
           >
-            {tab.text}
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
       </div>
@@ -88,7 +86,7 @@ export default function Tasks() {
       <form onSubmit={addNewTask} className="mt-5 flex items-center gap-2">
         <input
           type="text"
-          className="flex-1 rounded-xl bg-[#15191D] px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-green-500/40 focus:bg-black"
+          className="flex-1 rounded-xl bg-[#15191D] px-4 py-3 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-green-500/40"
           placeholder="Add a new task"
           value={taskText}
           onChange={(e) => setTaskText(e.target.value)}
@@ -105,14 +103,14 @@ export default function Tasks() {
 
       {/* Task list */}
       <section className="mt-4 space-y-2">
-        {tasks.map((task) => (
+        {filteredTasks.map((task) => (
           <div
             key={task.id}
-            className="flex items-center justify-between gap-4 rounded-xl border border-green-500/10 bg-black/40 p-4 transition hover:border-green-500/30"
+            className="flex items-center gap-4 rounded-xl border border-green-500/10 bg-black/40 p-4 transition hover:border-green-500/30"
           >
             {/* Priority */}
             <span
-              className={`rounded-full px-2 py-0.5 text-xs font-medium uppercase tracking-wide
+              className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium uppercase
                 ${
                   task.priority === "low"
                     ? "bg-red-500/10 text-red-400"
@@ -125,29 +123,39 @@ export default function Tasks() {
             </span>
 
             {/* Task text */}
-            <div>
+            <div className="flex-1">
               <p
-                className={`flex-1 text-xl font-medium ${
+                className={`text-sm font-medium ${
                   task.status === "completed"
                     ? "line-through text-gray-500"
-                    : ""
+                    : "text-gray-100"
                 }`}
               >
                 {task.task}
               </p>
-              <p className="text-green-500 text-xs uppercase">{task.status}</p>
+              <p className="mt-1 text-xs uppercase text-green-500/80">
+                {task.status}
+              </p>
             </div>
 
-            {!(task.status === "completed") && (
+            {/* Action */}
+            {task.status === "active" && (
               <button
                 onClick={() => markAsCompleted(task.id)}
-                className="text-xs text-green-600 p-1 border rounded-3xl hover:bg-gray-700"
+                className="flex items-center gap-1 rounded-full border border-green-500/30 px-3 py-1 text-xs text-green-400 transition hover:bg-green-500/10"
               >
-                Mark as completed
+                <Check size={12} />
+                Done
               </button>
             )}
           </div>
         ))}
+
+        {filteredTasks.length === 0 && (
+          <p className="py-6 text-center text-sm text-gray-500">
+            No tasks here 👀
+          </p>
+        )}
       </section>
     </main>
   );

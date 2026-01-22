@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 
 interface Note {
+  id: number;
   text: string;
-  timeStamp: Date;
+  timeStamp: number;
 }
 
 export default function Notes() {
   const [notes, setNotes] = useState<Note[]>([]);
-  const [noteText, setNoteText] = useState<string>("");
+  const [noteText, setNoteText] = useState("");
 
   function addNote(e: React.FormEvent) {
     e.preventDefault();
@@ -16,8 +17,9 @@ export default function Notes() {
 
     setNotes((prev) => [
       {
-        text: noteText,
-        timeStamp: new Date(),
+        id: Date.now(),
+        text: noteText.trim(),
+        timeStamp: Date.now(),
       },
       ...prev,
     ]);
@@ -25,41 +27,69 @@ export default function Notes() {
     setNoteText("");
   }
 
+  function formatTimeAgo(time: number) {
+    const diff = Date.now() - time;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 1) return "just now";
+    if (minutes < 60) return `${minutes} min ago`;
+    if (hours < 24) return `${hours} hr ago`;
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  }
+
   return (
-    <main className="bg-gradient-to-br from-[#14181C] to-[#0E1114] text-white py-6 px-10 rounded-3xl">
+    <main className="rounded-3xl bg-gradient-to-br from-[#14181C] to-[#0E1114] px-8 py-6 text-white shadow-xl">
+      {/* Header */}
       <div>
-        <h1 className="text-2xl font-medium">Quick Notes</h1>
-        <p className="text-gray-400 font-medium">
+        <h1 className="text-2xl font-semibold tracking-tight">Quick Notes</h1>
+        <p className="mt-1 text-sm text-gray-400">
           {notes.length} {notes.length === 1 ? "note" : "notes"} saved
         </p>
       </div>
 
-      <form onSubmit={addNote}>
+      {/* Add note */}
+      <form onSubmit={addNote} className="mt-4">
         <textarea
-          name="note"
           value={noteText}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            setNoteText(e.target.value);
-          }}
-          className="h-[120px] w-full bg-[#15191D] hover:ring-1 hover:ring-gray-100/40 focus:bg-black focus:ring-1 focus:ring-green-500/40 focus:outline-none rounded-3xl my-4 p-3 text-md"
-        ></textarea>
-        <div className="flex items-center justify-end">
-          <button className="flex items-center gap-1 rounded-xl bg-green-500 px-4 py-3 text-sm font-semibold text-black transition hover:bg-green-600">
-            <Plus size={16} /> <span>Add Note</span>
+          onChange={(e) => setNoteText(e.target.value)}
+          placeholder="Write something..."
+          className="h-[120px] w-full resize-none rounded-2xl bg-[#15191D] p-4 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-green-500/40"
+        />
+
+        <div className="mt-3 flex justify-end">
+          <button
+            type="submit"
+            className="flex items-center gap-1 rounded-xl bg-green-500 px-4 py-2 text-sm font-semibold text-black transition hover:bg-green-600"
+          >
+            <Plus size={16} />
+            Add Note
           </button>
         </div>
       </form>
 
       {/* Notes list */}
-      <section className="mt-4">
+      <section className="mt-4 space-y-2">
         {notes.map((note) => (
-          <div className="rounded-xl border border-green-500/10 bg-black/40 px-4 py-3 my-2 transition hover:border-green-500/30">
-            <p className="text-xl font-medium mb-2">{note.text}</p>
-            <p className="text-gray-400 text-xs">
-              {`${new Date().getDate() - note.timeStamp.getDate()} days ago`}
+          <div
+            key={note.id}
+            className="rounded-xl border border-green-500/10 bg-black/40 p-4 transition hover:border-green-500/30"
+          >
+            <p className="text-sm font-medium text-gray-100 whitespace-pre-wrap">
+              {note.text}
+            </p>
+            <p className="mt-2 text-xs text-gray-400">
+              {formatTimeAgo(note.timeStamp)}
             </p>
           </div>
         ))}
+
+        {notes.length === 0 && (
+          <p className="py-6 text-center text-sm text-gray-500">
+            No notes yet ✍️
+          </p>
+        )}
       </section>
     </main>
   );
